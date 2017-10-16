@@ -1,18 +1,24 @@
 (function() {
-  var COUNT_FRAMERATE, COUNT_MS_PER_FRAME, DIGIT_FORMAT, DIGIT_HTML, DIGIT_SPEEDBOOST, DURATION, FORMAT_MARK_HTML, FORMAT_PARSER, FRAMERATE, FRAMES_PER_VALUE, MS_PER_FRAME, MutationObserver, Odometer, RIBBON_HTML, TRANSITION_END_EVENTS, TRANSITION_SUPPORT, VALUE_HTML, addClass, createFromHTML, fractionalPart, now, removeClass, requestAnimationFrame, round, transitionCheckStyles, trigger, truncate, wrapJQuery, _jQueryWrapped, _old, _ref, _ref1,
+  var COUNT_FRAMERATE, COUNT_MS_PER_FRAME, DIGIT_FORMAT, DIGIT_HTML, DIGIT_INNER_HTML, DIGIT_SPACER, DIGIT_SPACER_HTML, DIGIT_SPEEDBOOST, DURATION, FORMAT_MARK_HTML, FORMAT_PARSER, FRAMERATE, FRAMES_PER_VALUE, MS_PER_FRAME, MutationObserver, Odometer, RIBBON_HTML, TRANSITION_END_EVENTS, TRANSITION_SUPPORT, VALUE_HTML, addClass, createFromHTML, fractionalPart, now, removeClass, requestAnimationFrame, round, transitionCheckStyles, trigger, truncate, wrapJQuery, _jQueryWrapped, _old, _ref, _ref1,
     __slice = [].slice;
 
   VALUE_HTML = '<span class="odometer-value"></span>';
 
   RIBBON_HTML = '<span class="odometer-ribbon"><span class="odometer-ribbon-inner">' + VALUE_HTML + '</span></span>';
 
-  DIGIT_HTML = '<span class="odometer-digit"><span class="odometer-digit-spacer">8</span><span class="odometer-digit-inner">' + RIBBON_HTML + '</span></span>';
+  DIGIT_SPACER_HTML = '<span class="odometer-digit-spacer"></span>';
+
+  DIGIT_INNER_HTML = '<span class="odometer-digit-inner">' + RIBBON_HTML + '</span>';
+
+  DIGIT_HTML = '<span class="odometer-digit">' + DIGIT_SPACER_HTML + DIGIT_INNER_HTML + '</span>';
 
   FORMAT_MARK_HTML = '<span class="odometer-formatting-mark"></span>';
 
   DIGIT_FORMAT = '(,ddd).dd';
 
   FORMAT_PARSER = /^\(?([^)]*)\)?(?:(.)(d+))?$/;
+
+  DIGIT_SPACER = 8;
 
   FRAMERATE = 30;
 
@@ -318,7 +324,7 @@
     };
 
     Odometer.prototype.formatDigits = function(value) {
-      var digit, valueDigit, valueString, wholePart, _i, _j, _len, _len1, _ref, _ref1;
+      var digit, valueDigit, valueString, wholePart, _i, _j, _len, _len1, _ref, _ref1, _ref2;
       this.digits = [];
       if (this.options.formatFunction) {
         valueString = this.options.formatFunction(value);
@@ -328,6 +334,7 @@
           if (valueDigit.match(/0-9/)) {
             digit = this.renderDigit();
             digit.querySelector('.odometer-value').innerHTML = valueDigit;
+            digit.querySelector('.odometer-digit-spacer').innerHTML = (_ref1 = this.options.digitSpacer) != null ? _ref1 : DIGIT_SPACER;
             this.digits.push(digit);
             this.insertDigit(digit);
           } else {
@@ -336,9 +343,9 @@
         }
       } else {
         wholePart = !this.format.precision || !fractionalPart(value) || false;
-        _ref1 = value.toString().split('').reverse();
-        for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
-          digit = _ref1[_j];
+        _ref2 = value.toString().split('').reverse();
+        for (_j = 0, _len1 = _ref2.length; _j < _len1; _j++) {
+          digit = _ref2[_j];
           if (digit === '.') {
             wholePart = true;
           }
@@ -395,7 +402,7 @@
     };
 
     Odometer.prototype.addDigit = function(value, repeating) {
-      var chr, digit, resetted, _ref;
+      var chr, digit, resetted, _ref, _ref1;
       if (repeating == null) {
         repeating = true;
       }
@@ -425,6 +432,7 @@
       }
       digit = this.renderDigit();
       digit.querySelector('.odometer-value').innerHTML = value;
+      digit.querySelector('.odometer-digit-spacer').innerHTML = (_ref1 = this.options.digitSpacer) != null ? _ref1 : DIGIT_SPACER;
       this.digits.push(digit);
       return this.insertDigit(digit);
     };

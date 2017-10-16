@@ -124,6 +124,8 @@ window.odometerOptions = {
   theme: 'car', // Specify the theme (if you have more than one theme css file on the page)
   animation: 'count' // Count is a simpler animation method which just increments the value,
                      // use it when you're looking for something more subtle.
+  digitSpacer: '8'  // Set the invisible character used to space out the numbers.
+                    // Useful when your font has unusually wide numbers.
 };
 ```
 

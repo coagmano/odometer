@@ -1,6 +1,8 @@
 VALUE_HTML = '<span class="odometer-value"></span>'
 RIBBON_HTML = '<span class="odometer-ribbon"><span class="odometer-ribbon-inner">' + VALUE_HTML + '</span></span>'
-DIGIT_HTML = '<span class="odometer-digit"><span class="odometer-digit-spacer">8</span><span class="odometer-digit-inner">' + RIBBON_HTML + '</span></span>'
+DIGIT_SPACER_HTML = '<span class="odometer-digit-spacer"></span>'
+DIGIT_INNER_HTML  = '<span class="odometer-digit-inner">' + RIBBON_HTML + '</span>'
+DIGIT_HTML = '<span class="odometer-digit">' + DIGIT_SPACER_HTML + DIGIT_INNER_HTML + '</span>'
 FORMAT_MARK_HTML = '<span class="odometer-formatting-mark"></span>'
 
 # The bit within the parenthesis will be repeated, so (,ddd) becomes 123,456,789....
@@ -17,6 +19,9 @@ FORMAT_MARK_HTML = '<span class="odometer-formatting-mark"></span>'
 DIGIT_FORMAT = '(,ddd).dd'
 
 FORMAT_PARSER = /^\(?([^)]*)\)?(?:(.)(d+))?$/
+
+# The widest number, used to control the width of each digit element
+DIGIT_SPACER = 8
 
 # What is our target framerate?
 FRAMERATE = 30
@@ -278,6 +283,7 @@ class Odometer
         if valueDigit.match(/0-9/)
           digit = @renderDigit()
           digit.querySelector('.odometer-value').innerHTML = valueDigit
+          digit.querySelector('.odometer-digit-spacer').innerHTML = @options.digitSpacer ? DIGIT_SPACER
           @digits.push digit
           @insertDigit digit
         else
@@ -359,6 +365,7 @@ class Odometer
 
     digit = @renderDigit()
     digit.querySelector('.odometer-value').innerHTML = value
+    digit.querySelector('.odometer-digit-spacer').innerHTML = @options.digitSpacer ? DIGIT_SPACER
     @digits.push digit
 
     @insertDigit digit
